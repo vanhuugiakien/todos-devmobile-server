@@ -42,12 +42,20 @@ export class UserService {
     return result;
   }
   async getAll() {
-    return await (await this.db.get()).docs.map((doc) => doc.data());
+    return await (
+      await this.db.get()
+    ).docs.map((doc) => {
+      const result = { ...doc.data() };
+      console.log(result);
+      delete result.password;
+      return result;
+    });
   }
   async search(keyword: string) {
     return (await this.db.where('name', '==', keyword).get()).docs.map(
       (doc) => {
         const result = { ...doc.data() };
+        console.log(result);
         delete result.password;
         return result;
       },

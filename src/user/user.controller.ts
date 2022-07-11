@@ -1,11 +1,20 @@
-import { Controller, Get, Param, Post, Put, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from './user.service';
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @Get('/:id')
+  @Get('get/:id')
   async get(@Param('id') id: string, @Res() res: Response) {
     try {
       if (id == 'all') {
@@ -19,7 +28,16 @@ export class UserController {
       return res.status(500).send({ message: 'Cannot get', statuseCode: 500 });
     }
   }
-
+  @Get('/search')
+  async search(@Query() query, @Res() res: Response) {
+    try {
+      console.log(query.keyword);
+      const result = await this.userService.search(query.keyword);
+      return res.status(200).send([...result]);
+    } catch (err) {
+      return res.status(500).send({ message: 'Cannot get', statuseCode: 500 });
+    }
+  }
   @Post('')
   async create(@Req() req, @Res() res: Response) {
     try {
