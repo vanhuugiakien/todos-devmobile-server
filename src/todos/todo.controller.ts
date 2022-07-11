@@ -31,6 +31,15 @@ export class TodoController {
       return res.status(500).send({ message: 'Cannot get', statuseCode: 500 });
     }
   }
+  @Get('/projects/:id')
+  async getFromUser(@Param('id') id, @Res() res: Response) {
+    try {
+      const result = await this.todoService.getFromUser(id);
+      return res.status(200).send({ data: result, statuseCode: 200 });
+    } catch {
+      return res.status(500).send({ message: 'Cannot get', statuseCode: 500 });
+    }
+  }
 
   @Post()
   async create(@Req() req: Request, @Res() res: Response) {
@@ -51,6 +60,18 @@ export class TodoController {
         tasks: body.tasks as Task[],
       };
       const result = await this.todoService.create(newTodo);
+      return res.status(200).send({ data: result, statuseCode: 200 });
+    } catch {
+      return res
+        .status(500)
+        .send({ message: 'Cannot create', statuseCode: 500 });
+    }
+  }
+  @Post('/add-task')
+  async addTask(@Req() req: Request, @Res() res: Response) {
+    try {
+      const body = req.body;
+      const result = await this.todoService.addTask(body.id, body.task);
       return res.status(200).send({ data: result, statuseCode: 200 });
     } catch {
       return res

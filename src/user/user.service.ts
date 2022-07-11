@@ -44,4 +44,9 @@ export class UserService {
   async getAll() {
     return await (await this.db.get()).docs.map((doc) => doc.data());
   }
+  async search(keyword: string) {
+    return (await this.db.where('name', '==', keyword).get()).docs.map((doc) =>
+      doc.data(),
+    );
+  }
 }
