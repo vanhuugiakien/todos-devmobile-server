@@ -47,7 +47,7 @@ export class UserService {
   async search(keyword: string) {
     return (await this.db.where('name', '==', keyword).get()).docs.map(
       (doc) => {
-        let result = { ...doc.data() };
+        const result = { ...doc.data() };
         delete result.password;
         return result;
       },
